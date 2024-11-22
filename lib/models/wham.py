@@ -106,6 +106,15 @@ class Network(nn.Module):
         
         return output        
     
+    def forward_smpl_full(self, **kwargs):
+        self.output = self.smpl(self.pred_pose, 
+                                self.pred_shape,
+                                cam=self.pred_cam,
+                                return_full_pose=not self.training,
+                                **kwargs,
+                                )
+
+        return self.output
     
     def preprocess(self, x, mask):
         self.b, self.f = x.shape[:2]

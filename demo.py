@@ -166,6 +166,13 @@ def run(cfg,
         results[_id]['betas'] = pred['betas'].cpu().squeeze(0).numpy()
         results[_id]['verts'] = (pred['verts_cam'] + pred['trans_cam'].unsqueeze(1)).cpu().numpy()
         results[_id]['frame_ids'] = frame_id
+
+        #add for keypoints!!
+        smpl_full = network.forward_smpl_full(**kwargs)
+        results[_id]['kp3d'] = smpl_full.joints.cpu().numpy()
+        #results[_id]['kp3d_nn'] = smpl_full.pred_kp3d
+        results[_id]['full_joints2d'] = smpl_full.full_joints2d.cpu().numpy()
+        results[_id]['weak_joints2d'] = smpl_full.weak_joints2d.cpu().numpy()
     
     if save_pkl:
         joblib.dump(results, osp.join(output_pth, "wham_output.pkl"))
